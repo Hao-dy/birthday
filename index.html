@@ -3,7 +3,7 @@
 <head>
     <link rel="icon" type="image/png" href="../src/icon.svg">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Happy Birthday</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -166,6 +166,70 @@
         .scrollable-text::-webkit-scrollbar-thumb {
             background-color: rgba(255, 105, 180, 0.5);
             border-radius: 10px;
+        }
+
+        /* ===== 移动端适配：修复标题下方文字被遮挡/挤压问题 ===== */
+        /* 惊喜层增加 safe-area 间距，避免被微信/浏览器导航栏/底部手势条遮挡 */
+        #surprise-layer {
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        /* 仅对窄屏（手机竖屏）生效的卡片优化 */
+        @media (max-width: 640px) and (orientation: portrait) {
+            /* 卡片：增大最大高度，使用动态视口高度（dvh）适配各种浏览器 */
+            #flip-card-container {
+                max-height: 88dvh !important;
+                height: auto;
+                margin-left: 0.6rem;
+                margin-right: 0.6rem;
+            }
+
+            /* 卡片背面内层：减小padding增加可用空间 */
+            .flip-card-back .bg-black\/90 {
+                padding: 1rem !important;
+            }
+
+            /* 卡片正面：同样减小padding */
+            .flip-card-front .bg-black\/80 {
+                padding: 1.25rem !important;
+            }
+
+            /* 图片：从4:3改为更扁平的比例，大幅减小垂直占用 */
+            .card-page > div.aspect-\[4\/3\],
+            .flip-card-front div.aspect-\[4\/3\] {
+                aspect-ratio: 16 / 9;
+                max-height: 28dvh;
+                width: 100%;
+                margin-bottom: 0.6rem !important;
+            }
+
+            /* 标题：减小字号与下边距 */
+            .card-page h3 {
+                font-size: 1.25rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+
+            /* 打字机文字区：强制最小高度，保证至少能看到4~5行内容 */
+            .card-page .scrollable-text {
+                min-height: 8rem !important;
+                flex-shrink: 1;
+                margin-bottom: 0.5rem !important;
+            }
+
+            /* 底部分页控件：减小间距与内边距 */
+            #card-page-1 ~ div.mt-auto,
+            #card-page-2 ~ div.mt-auto,
+            #card-page-3 ~ div.mt-auto,
+            #flip-card-container .mt-auto {
+                padding-top: 0.5rem !important;
+                gap: 0.4rem !important;
+            }
+            #card-prev-btn, #card-next-btn, #close-card-btn {
+                padding-top: 0.4rem !important;
+                padding-bottom: 0.4rem !important;
+                font-size: 0.8rem !important;
+            }
         }
     </style>
 </head>
